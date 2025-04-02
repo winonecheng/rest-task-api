@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gorilla/mux"
 )
 
 func TestGetTasks(t *testing.T) {
@@ -38,7 +40,14 @@ func TestUpdateTask(t *testing.T) {
 
 	updatedTask := Task{Name: "Updated Task", Status: 1}
 	body, _ := json.Marshal(updatedTask)
+
 	req := httptest.NewRequest("PUT", "/tasks/1", bytes.NewReader(body))
+
+	// Mock the mux.Vars
+	req = mux.SetURLVars(req, map[string]string{
+		"id": "1",
+	})
+
 	w := httptest.NewRecorder()
 
 	updateTask(w, req)
@@ -53,6 +62,12 @@ func TestDeleteTask(t *testing.T) {
 	tasks[1] = task
 
 	req := httptest.NewRequest("DELETE", "/tasks/1", nil)
+
+	// Mock the mux.Vars
+	req = mux.SetURLVars(req, map[string]string{
+		"id": "1",
+	})
+
 	w := httptest.NewRecorder()
 
 	deleteTask(w, req)
