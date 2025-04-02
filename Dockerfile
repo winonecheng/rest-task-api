@@ -4,12 +4,11 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o main
+RUN CGO_ENABLED=0 GOOS=linux go build -o rest-task-api
 
 # Stage 2: Run
 FROM alpine:latest
 WORKDIR /app
-COPY --from=builder /app/main .
-COPY meme_coins.db .
+COPY --from=builder /app/rest-task-api .
 EXPOSE 8080
-CMD ["./main"]
+CMD ["./rest-task-api"]
