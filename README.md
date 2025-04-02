@@ -53,7 +53,35 @@ go run main.go
 docker build -t rest-task-api .
 
 # Run the container
-docker run -p 8080:8080 rest-task-api
+docker run -d -p 8080:8080 rest-task-api
+```
+
+## API Usage Examples
+
+You can interact with the API using curl commands:
+
+### List all tasks
+```bash
+curl -X GET http://localhost:8080/tasks
+```
+
+### Create a new task
+```bash
+curl -X POST http://localhost:8080/tasks \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Complete project", "status": 0}'
+```
+
+### Update a task
+```bash
+curl -X PUT http://localhost:8080/tasks/1 \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Complete project", "status": 1}'
+```
+
+### Delete a task
+```bash
+curl -X DELETE http://localhost:8080/tasks/1
 ```
 
 ## Testing
